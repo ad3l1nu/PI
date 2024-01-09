@@ -1,0 +1,175 @@
+<?php
+include('src/config.php');
+include('src/functions.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>MediCare Hub : Înregistrare</title>
+		<?php include('src/head.php') ?>
+	</head>
+
+	<body>
+
+		<?php include('src/preload.php') ?>
+		<!--=========== BEGIN HEADER SECTION ================-->
+		<?php include('src/header.php') ?>
+		<!--=========== END HEADER SECTION ================-->
+
+		<?php
+		$fname = $lname = $email = $dob = $gnd = $addr = $phno = $pwd = $repwd = '';
+		if (isset($_POST['register'])) {
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$name = $fname . " " . $lname;
+			$email = $_POST['mail'];
+			$dob = $_POST['dob'];
+			$gnd = $_POST['gnd'];
+			$addr = $_POST['addr'];
+			$phno = $_POST['phno'];
+			$pwd = $_POST['pwd'];
+			$repwd = $_POST['repwd'];
+			if ($pwd != $repwd) {
+				alert("Password doesn\'t match");
+			}
+			$qry1 = mysqli_query($con, "SELECT * FROM client WHERE email = '$email'") or die(mysqli_error($con));
+			$qry2 = mysqli_num_rows($qry1);
+			if ($qry2 == 0) {
+				$qry3 = mysqli_query($con, "INSERT INTO client (name, email, dob, gender, address, phone, password) VALUES ('$name', '$email', '$dob', '$gnd', '$addr', '$phno','$pwd')") or die(mysqli_error($con));
+				alert_and_redirect("Registered Successfully", "signin.php");
+			} else {
+				alert("Email already Registered");
+			}
+		}
+		echo youAreHere("Register");
+		?>
+
+		<!--=========== BEGIN REGISTRATION SECTION ================-->
+		<section id="service">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12">
+						<div class="service-area">
+							<!-- Start Service Title -->
+							<div class="section-heading">
+								<h2>Înregistrare</h2>
+								<div class="line"></div>
+							</div>
+							<div class="service-content">
+								<div class="row">
+									<div class="col-lg-12 col-md-12">
+										<form class="appointment-form" method="post">
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-4 col-md-4 col-sm-6">
+													<label class="control-label">Prenume <span class="required">*</span>
+													</label>
+													<input type="text" class="wp-form-control wpcf7-text" placeholder="First name" name="fname"
+														value="<?= $fname ?>" required pattern="[A-Za-z-0-9]+">
+												</div>
+												<div class="col-lg-4 col-md-4 col-sm-6">
+													<label class="control-label">Nume de familie <span class="required">*</span>
+													</label>
+													<input type="text" class="wp-form-control wpcf7-text" placeholder="Last name" name="lname"
+														value="<?= $lname ?>" required pattern="[A-Za-z-0-9]+">
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Email <span class="required">*</span></label>
+													<input type="email" class="wp-form-control wpcf7-text" placeholder="Email address" name="mail"
+														value="<?= $email ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Data nașterii <span class="required">*</span></label>
+													<input type="date" class="wp-form-control wpcf7-text" placeholder="dd/mm/yy"
+														max="<?= date("Y-m-d") ?>" name="dob" value="<?= $dob ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Gen <span class="required">*</span></label>
+													<select class="wp-form-control wpcf7-text" name="gnd" required>
+														<option value="<?= $gnd ?>"><?= $gnd ?></option>
+														<option value="Male">Bărbat</option>
+														<option value="Female">Femeie</option>
+													</select>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Adresă <span class="required">*</span></label>
+													<input type="text" class="wp-form-control wpcf7-text" placeholder="Address" name="addr"
+														value="<?= $addr ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Telefon <span class="required">*</span></label>
+													<input type="number" class="wp-form-control wpcf7-text" placeholder="Phone No" name="phno"
+														value="<?= $phno ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Parolă <span class="required">*</span></label>
+													<input type="password" class="wp-form-control wpcf7-text" placeholder="Password" name="pwd"
+														value="<?= $pwd ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<label class="control-label">Reintroduceți parola <span class="required">*</span></label>
+													<input type="password" class="wp-form-control wpcf7-text" placeholder="Retype Password"
+														name="repwd" value="<?= $repwd ?>" required>
+												</div>
+												<div class="col-lg-2 col-md-2"></div>
+											</div>
+											<div class="row">
+												<div class="col-lg-2 col-md-2"></div>
+												<div class="col-lg-8 col-md-8 col-sm-6">
+													<button class="wpcf7-submit button--itzel" name="register" type="submit">
+														<i class="button__icon fa fa-share"></i><span>Înregistrare</span>
+													</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!--=========== END REGISTRATION SECTION ================-->
+
+		<!--=========== BEGIN Counter SECTION ================-->
+		<?php include('src/counter.php') ?>
+		<!--=========== End Counter SECTION ================-->
+
+		<!--=========== BEGIN Footer SECTION ================-->
+		<?php include('src/footer.php') ?>
+		<!--=========== End Footer SECTION ================-->
+
+		<?php include('src/incfooter.php') ?>
+	</body>
+
+</html>
